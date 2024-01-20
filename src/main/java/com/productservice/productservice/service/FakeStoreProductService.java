@@ -2,9 +2,13 @@ package com.productservice.productservice.service;
 
 import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
+import com.productservice.productservice.exceptions.ProductNotFoundException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.ArrayList;
@@ -33,12 +37,16 @@ public class FakeStoreProductService implements ProductService{
         return genericProductDto;
     }
     @Override
-    public GenericProductDto  getProductById(Long id) {
+    public GenericProductDto  getProductById(Long id) throws ProductNotFoundException{
         //Integrate the FakeStore Api
         RestTemplate restTemplate=restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> responseEntity=
                 restTemplate.getForEntity(specificProductUrl,FakeStoreProductDto.class,id);
 
+        FakeStoreProductDto fakeStoreProductDto=responseEntity.getBody();
+        if(fakeStoreProductDto==null){
+            throw new ProductNotFoundException("id not exist"+id);
+        }
         return convertFakeProdToGenericProd(responseEntity.getBody());
     }
 
@@ -56,7 +64,15 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public void deleteProduct() {
+    public GenericProductDto deleteProduct(Long id) {
+        RestTemplate restTemplate=restTemplateBuilder.build();
+        restTemplate.delete(specificProductUrl,id);
+
+        RequestCallback requestCallback = restTemplate.acceptHeaderRequestCallback(FakeStoreProductDto.class);
+        ResponseExtractor<ResponseEntity<FakeStoreProductDto>> responseExtractor = restTemplate.responseEntityExtractor(FakeStoreProductDto.class);
+        ResponseEntity<FakeStoreProductDto> responseEntity= restTemplate.execute(specificProductUrl, HttpMethod.DELETE, requestCallback, responseExtractor, id);
+
+        return convertFakeProdToGenericProd(responseEntity.getBody());
 
     }
 

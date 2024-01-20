@@ -1,11 +1,15 @@
 package com.productservice.productservice.controllers;
 
+import com.productservice.productservice.dtos.ExceptionDto;
 import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import com.productservice.productservice.exceptions.ProductNotFoundException;
 //Use restController if we are using rest api in that controller
     @RestController
     @RequestMapping("/products")
@@ -18,7 +22,7 @@ import java.util.List;
     }
 
     @GetMapping("/{id}")
-    public GenericProductDto getProductById(@PathVariable("id") Long id){
+    public GenericProductDto getProductById(@PathVariable("id") Long id) throws ProductNotFoundException{
 
         return productService.getProductById(id);
         //return "ScalerII Product fethed with id "+id;
@@ -29,12 +33,26 @@ import java.util.List;
         return  productService.getAllProducts();
     }
 
-    @DeleteMapping("/id")
-    public void deleteProductById(){}
+    @DeleteMapping("/{id}")
+    public GenericProductDto deleteProductById(@PathVariable("id") Long id){
+
+        return productService.deleteProduct(id);
+    }
 
     @PostMapping
     public GenericProductDto createProduct(@RequestBody GenericProductDto genericProductDto){
         return productService.createProduct(genericProductDto);
     }
 
+    public void updateProductById(){}
+
+   /* @ExceptionHandler(ProductNotFoundException.class)
+    private ResponseEntity<ExceptionDto> handleProductNotFoundException(ProductNotFoundException productNotFoundException){
+        ExceptionDto exceptionDto=new ExceptionDto();
+        exceptionDto.setMessage(productNotFoundException.getMessage());
+        exceptionDto.setHttpStatus(HttpStatus.NOT_FOUND);
+        //find how to change response status
+        ResponseEntity responseEntity=new ResponseEntity(exceptionDto,HttpStatus.NOT_FOUND);
+        return responseEntity;
+    }*/
 }
