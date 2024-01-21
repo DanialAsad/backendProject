@@ -4,6 +4,7 @@ import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.exceptions.ProductNotFoundException;
 import com.productservice.productservice.thirdPartyClients.ThirdPartyInterface;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,21 @@ import java.util.List;
 @Component
 public class FakeStoreAdapter {
     private RestTemplateBuilder restTemplateBuilder;
+    @Value("${fakestore.api.url}")
+    private String fakeStoreUrl;
 
-    private String specificProductUrl ="https://fakestoreapi.com/products/{id}";
+    @Value("${fakestore.api.url.products}")
+    private String pathForProducts;
+
+    private String specificProductUrl;
+
 
     private String genericProductUrl ="https://fakestoreapi.com/products";
 
-    FakeStoreAdapter(RestTemplateBuilder restTemplateBuilder){
+    FakeStoreAdapter(RestTemplateBuilder restTemplateBuilder,@Value("${fakestore.api.url}") String fakeStoreUrl,
+    @Value("${fakestore.api.url.products}") String pathForProducts){
         this.restTemplateBuilder=restTemplateBuilder;
+        this.specificProductUrl=fakeStoreUrl+pathForProducts+"/{id}";
     }
 
     public static GenericProductDto convertFakeProdToGenericProd(FakeStoreProductDto fakeStoreProductDto){
@@ -39,6 +48,9 @@ public class FakeStoreAdapter {
 
     public FakeStoreProductDto  getProductById(Long id) throws ProductNotFoundException {
         //Integrate the FakeStore Api
+        System.out.println("fakeStoreUrl: "+fakeStoreUrl);
+        System.out.println("pathForProducts: "+pathForProducts);
+        System.out.println("specificProductUrl: "+specificProductUrl);
         RestTemplate restTemplate=restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDto> responseEntity=
                 restTemplate.getForEntity(specificProductUrl,FakeStoreProductDto.class,id);
