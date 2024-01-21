@@ -1,15 +1,12 @@
 package com.productservice.productservice.controllers;
 
-import com.productservice.productservice.dtos.ExceptionDto;
-import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
+import com.productservice.productservice.exceptions.ProductNotFoundException;
 import com.productservice.productservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import com.productservice.productservice.exceptions.ProductNotFoundException;
 //Use restController if we are using rest api in that controller
     @RestController
     @RequestMapping("/products")
