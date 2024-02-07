@@ -7,6 +7,7 @@ import com.productservice.productservice.models.Product;
 import com.productservice.productservice.repositories.CategoryRepository;
 import com.productservice.productservice.repositories.PriceRepository;
 import com.productservice.productservice.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -47,6 +48,7 @@ public class ProductServiceApplication implements CommandLineRunner {
         SpringApplication.run(ProductServiceApplication.class, args);
     }
 
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
         /*Mentor mentor=new Mentor();
@@ -85,23 +87,72 @@ public class ProductServiceApplication implements CommandLineRunner {
         List<Product> products=category.getProducts();
         for(Product product:products)
             System.out.println(product.getTitle());*/
+       /* Price price=new Price();
+        price.setCurreny("INR");
+        price.setValue(100000);*/
+       // Price savedPrice=priceRepository.save(price);
+
+        /*Category category=new Category();
+        category.setName("Apple Devies");
+        Category savedCategory=categoryRepository.save(category);*/
+
+        /*Optional<Price> optionalPrice=priceRepository.findById(UUID.fromString("d0cad9e2-9cf1-4dc9-8ae4-17f235969d0f"));
+        if(optionalPrice.isEmpty())
+            throw new Exception("Price Object is null");
+
+        Price price=optionalPrice.get();*/
+
+        Optional<Category> optionalCategory=categoryRepository.findById(UUID.fromString("ec6eef7d-4df3-4350-88d0-315d104dcb98"));
+        if(optionalCategory.isEmpty())
+            throw new Exception("Category is null");
+
+        Category category=optionalCategory.get();
+
+        List<Product> products=category.getProducts();
+        for(Product product:products)
+            System.out.println(product.getTitle());
+        /*Category category=new Category();
+        category.setName("Apple Device");
+        Category savedCategory=categoryRepository.save(category);
+
         Price price=new Price();
         price.setCurreny("INR");
         price.setValue(100000);
-       // Price savedPrice=priceRepository.save(price);
-
-        Category category=new Category();
-        category.setName("Apple Devies");
-        Category savedCategory=categoryRepository.save(category);
-
 
         Product product=new Product();
         product.setTitle("iphone 15 prod");
         product.setDescription("best iPhone");
-        product.setCategory(savedCategory);
+        product.setCategory(category);
         product.setPrice(price);
+        product.setImage("IMG");
 
         Product savedProduct=productRepository.save(product);
+
+        Price price1=new Price();
+        price1.setCurreny("INR");
+        price1.setValue(100000);
+
+        Product product1=new Product();
+        product1.setTitle("iphone 15 prod");
+        product1.setDescription("best iPhone");
+        product1.setCategory(category);
+        product1.setPrice(price1);
+        product1.setImage("IMG");
+
+        Product savedProduct1=productRepository.save(product1);
+
+        Price price2=new Price();
+        price2.setCurreny("INR");
+        price2.setValue(100000);
+
+        Product product2=new Product();
+        product2.setTitle("iphone 15 prod");
+        product2.setDescription("best iPhone");
+        product2.setCategory(category);
+        product2.setPrice(price2);
+        product2.setImage("IMG");
+
+        Product savedProduct2=productRepository.save(product2);*/
         /*Optional<Price> optionalPrice=priceRepository.findById(UUID.fromString("272d56af-8430-4c6d-ad84-c06d9e7cb33f"));
         if(optionalPrice.isEmpty())
             throw new Exception("Price is empty");
