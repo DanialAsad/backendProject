@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -102,15 +104,15 @@ public class ProductServiceApplication implements CommandLineRunner {
 
         Price price=optionalPrice.get();*/
 
-        Optional<Category> optionalCategory=categoryRepository.findById(UUID.fromString("ec6eef7d-4df3-4350-88d0-315d104dcb98"));
+        /*Optional<Category> optionalCategory=categoryRepository.findById(UUID.fromString("ec6eef7d-4df3-4350-88d0-315d104dcb98"));
         if(optionalCategory.isEmpty())
             throw new Exception("Category is null");
 
         Category category=optionalCategory.get();
 
-        List<Product> products=category.getProducts();
-        for(Product product:products)
-            System.out.println(product.getTitle());
+        List<Product> products=category.getProducts();*/
+        /*for(Product product:products)
+            System.out.println(product.getTitle());*/
         /*Category category=new Category();
         category.setName("Apple Device");
         Category savedCategory=categoryRepository.save(category);
@@ -162,8 +164,16 @@ public class ProductServiceApplication implements CommandLineRunner {
         /*Optional<Product> optionalProduct=productRepository.findById(UUID.fromString("158dea1b-58ae-4d45-9add-d29f81b4e9c1"));
         if(optionalProduct.isEmpty())
             throw new Exception("Product is empty");
-        Product product=optionalProduct.get();
-        productRepository.deleteById(UUID.fromString("158dea1b-58ae-4d45-9add-d29f81b4e9c1"));*/
-
+        Product product=optionalProduct.get();*/
+        //List<Product> products=productRepository.findAllByTitleAndDescription("iphone 15 prod","best iPhone");
+        //List<Product> products=productRepository.findAllByPrice_ValueGreaterThan(50000);
+        //List<Product> products=productRepository.findAllByPrice_ValueLessThan(50000);
+        List<Product> products=productRepository.findAllByPrice_ValueBetween(25000,50000);
+        for(Product product1:products)
+            System.out.println(product1.getTitle());
+       /*Category category= categoryRepository.save(new Category("Samsung",new ArrayList<>()));
+        Product product=new Product("Samsung Fold 5","Samsung Fold Best","IMG",
+                category ,new Price("USD",40000.0));
+        productRepository.save(product);*/
     }
 }
