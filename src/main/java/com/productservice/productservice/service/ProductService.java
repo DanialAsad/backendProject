@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 public interface ProductService {
 
-    GenericProductDto getProductById(Long id) throws ProductNotFoundException;
+    GenericProductDto getProductById(String token,Long id) throws ProductNotFoundException;
 
     List<GenericProductDto> getAllProducts();
 

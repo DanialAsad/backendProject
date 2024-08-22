@@ -3,7 +3,10 @@ package com.productservice.productservice.service;
 import com.productservice.productservice.dtos.FakeStoreProductDto;
 import com.productservice.productservice.dtos.GenericProductDto;
 import com.productservice.productservice.exceptions.ProductNotFoundException;
+import com.productservice.productservice.security.JWTObject;
+import com.productservice.productservice.security.TokenValidator;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,15 +15,20 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.ArrayList;
-import com.productservice.productservice.thirdPartyClients.fakeStoreClients.FakeStoreAdapter;
+import java.util.Optional;
 
+import com.productservice.productservice.thirdPartyClients.fakeStoreClients.FakeStoreAdapter;
+@Primary
 @Service("fakeStoreProductService")
 public class FakeStoreProductService implements ProductService{
 
 private FakeStoreAdapter fakeStoreAdapter;
 
-    FakeStoreProductService(FakeStoreAdapter fakeStoreAdapter){
+private TokenValidator tokenValidator;
+
+    FakeStoreProductService(FakeStoreAdapter fakeStoreAdapter,TokenValidator tokenValidator){
         this.fakeStoreAdapter=fakeStoreAdapter;
+        this.tokenValidator=tokenValidator;
     }
 
     public static GenericProductDto convertFakeProdToGenericProd(FakeStoreProductDto fakeStoreProductDto){
@@ -34,9 +42,15 @@ private FakeStoreAdapter fakeStoreAdapter;
         return genericProductDto;
     }
     @Override
-    public GenericProductDto  getProductById(Long id) throws ProductNotFoundException{
+    public GenericProductDto  getProductById(String token,Long id) throws ProductNotFoundException{
         //Integrate the FakeStore Api
         //return fakeStoreAdapter.getProductById(id);
+        Optional<JWTObject> jwtObjetOptional = tokenValidator.validate(token);
+        if(jwtObjetOptional.isEmpty())
+            return null;
+        JWTObject jwtObject=jwtObjetOptional.get();
+        Long userId=jwtObject.getUserId();
+        // we can filter the data from here for authorization
         return convertFakeProdToGenericProd(fakeStoreAdapter.getProductById(id));
     }
 

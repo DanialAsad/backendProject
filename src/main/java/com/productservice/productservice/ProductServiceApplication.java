@@ -21,17 +21,17 @@ import java.util.UUID;
 @SpringBootApplication
 public class ProductServiceApplication implements CommandLineRunner {
 
-    private final CategoryRepository categoryRepository;
+   /* private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
-    private final PriceRepository priceRepository;
+    private final PriceRepository priceRepository;*/
 
-    public ProductServiceApplication(CategoryRepository categoryRepository,
+    /*public ProductServiceApplication(CategoryRepository categoryRepository,
                                      ProductRepository productRepository,
                                      PriceRepository priceRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.priceRepository = priceRepository;
-    }
+    }*/
 
     /*private MentorRepository mentorRepository;
 
@@ -168,9 +168,9 @@ public class ProductServiceApplication implements CommandLineRunner {
         //List<Product> products=productRepository.findAllByTitleAndDescription("iphone 15 prod","best iPhone");
         //List<Product> products=productRepository.findAllByPrice_ValueGreaterThan(50000);
         //List<Product> products=productRepository.findAllByPrice_ValueLessThan(50000);
-        List<Product> products=productRepository.findAllByPrice_ValueBetween(25000,50000);
+        /*List<Product> products=productRepository.findAllByPrice_ValueBetween(25000,50000);
         for(Product product1:products)
-            System.out.println(product1.getTitle());
+            System.out.println(product1.getTitle());*/
        /*Category category= categoryRepository.save(new Category("Samsung",new ArrayList<>()));
         Product product=new Product("Samsung Fold 5","Samsung Fold Best","IMG",
                 category ,new Price("USD",40000.0));
